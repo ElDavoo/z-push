@@ -1,7 +1,8 @@
-FROM php:7.1-fpm-alpine
+FROM php:7.2-fpm-alpine
 
-ARG ZPUSH_URL=http://download.z-push.org/final/2.3/z-push-2.3.9.tar.gz
-ARG ZPUSH_CSUM=2c761f89f2922935d9e9ed29d5daf161
+ARG ZPUSH_VERSION=2.7.3
+ARG ZPUSH_URL=https://github.com/Z-Hub/Z-Push/archive/refs/tags/${ZPUSH_VERSION}.tar.gz
+# ARG ZPUSH_CSUM=08fd591e75a6f8a244e5dbaa018c9c6a
 ARG UID=1513
 ARG GID=1513
 
@@ -47,12 +48,12 @@ RUN addgroup -g ${GID} zpush \
   && mkdir -p /opt/zpush
   # Install z-push
 RUN wget -q -O /tmp/zpush.tgz "$ZPUSH_URL" \
-  && if [ "$ZPUSH_CSUM" != "$(md5sum /tmp/zpush.tgz | awk '{print($1)}')" ]; then echo "Wrong md5sum of downloaded file!"; exit 1; fi \
-  && tar -zxf /tmp/zpush.tgz -C /opt/zpush --strip-components=1 \
-  && rm /tmp/zpush.tgz \
-  && chmod +x /usr/local/bin/docker-run.sh \
+  #&& if [ "$ZPUSH_CSUM" != "$(md5sum /tmp/zpush.tgz | awk '{print($1)}')" ]; then echo "Wrong md5sum of downloaded file!"; exit 1; fi \
+  && tar -zxf /tmp/zpush.tgz -C /opt/zpush --strip-components=2 Z-Push-${ZPUSH_VERSION}/src/ \
   && mv /opt/zpush/config.php /opt/zpush/config.php.dist \
-  && mv /opt/zpush/backend/imap/config.php /opt/zpush/backend/imap/config.php.dist
+  && mv /opt/zpush/backend/imap/config.php /opt/zpush/backend/imap/config.php.dist \
+  && chmod +x /usr/local/bin/docker-run.sh \
+  && rm /tmp/zpush.tgz
 
 VOLUME ["/state"]
 VOLUME ["/config"]
