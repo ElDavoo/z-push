@@ -20,15 +20,8 @@ cp /etc/supervisord.conf.dist /etc/supervisord.conf
     -e "s|imap_smtp_params = array()|imap_smtp_params = array('host' => '"$SMTP_SERVER"', 'port' => '"$SMTP_PORT"', 'auth' => true, 'username' => 'imap_username', 'password' => 'imap_password', 'verify_peer_name' => false, 'verify_peer' => false, 'allow_self_signed' => true)|" \
     -e "s/define('IMAP_FOLDER_CONFIGURED', false)/define('IMAP_FOLDER_CONFIGURED', true)/" /opt/zpush/backend/imap/config.php.dist > /config/imap.php
 
-cat >> /opt/zpush/config.php << 'END'
-<?php
-require '/config/config.php';
-END
-
-cat >> /opt/zpush/backend/imap/config.php << 'END'
-<?php
-require '/config/imap.php';
-END
+[ -f "/config/config.php" ] && cat /config/config.php >> /opt/zpush/config.php
+[ -f "/config/imap.php" ] && cat /config/imap.php >> /opt/zpush/backend/imap/config.php
 
 # setting up logrotate
 echo -e "/var/log/z-push/z-push.log\n{\n  compress\n  copytruncate\n  delaycompress\n rotate 7\n  daily\n}" > /etc/logrotate.d/z-pushlog
