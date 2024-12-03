@@ -1,8 +1,8 @@
-FROM php:7.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
-ARG ZPUSH_VERSION=2.7.3
+ARG ZPUSH_VERSION=2.7.5
 ARG ZPUSH_URL=https://github.com/Z-Hub/Z-Push/archive/refs/tags/${ZPUSH_VERSION}.tar.gz
-ARG ZPUSH_CSUM=08fd591e75a6f8a244e5dbaa018c9c6a
+ARG ZPUSH_CSUM=b77fe42dd383852ab9512fb0b01e631b
 ARG UID=1513
 ARG GID=1513
 
@@ -35,7 +35,7 @@ RUN set -ex \
   # Install php
 RUN docker-php-ext-configure imap --with-imap --with-imap-ssl
 RUN docker-php-ext-install imap pcntl sysvmsg sysvsem sysvshm
-RUN pecl install APCu-5.1.8 \
+RUN pecl install APCu-5.1.24 \
   && docker-php-ext-enable apcu \
   # Remove dev packages
   && apk del --no-cache \
