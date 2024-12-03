@@ -9,6 +9,7 @@ ARG GID=1513
 ENV TIMEZONE=Europe/Zurich \
   IMAP_SERVER=localhost \
   IMAP_PORT=143 \
+  IMAP_OPTIONS=/tls/norsh/novalidate-cert \
   SMTP_SERVER=tls://localhost \
   SMTP_PORT=465
 
